@@ -1,0 +1,99 @@
+package rules
+
+import (
+	math "math"
+)
+
+func MovesAvailable(slots []string) []int {
+	result := []int{}
+	for index, value := range slots {
+		if value == "" {
+			result = append(result, index)
+		}
+	}
+	return result
+}
+
+func IsWinner(slots []string, mark string) bool {
+	return ColumnWinner(slots, mark) || DiagonalWinner(slots, mark) || RowWinner(slots, mark)
+}
+
+func ColumnWinner(slots []string, mark string) bool {
+	columnCombinations := getPossibleColumnCombinations(slots)
+	return checkCombinations(columnCombinations, slots, mark)
+}
+
+func DiagonalWinner(slots []string, mark string) bool {
+	diagonalCombinations := getPossibleDiagonalCombinations(slots)
+	return checkCombinations(diagonalCombinations, slots, mark)
+}
+
+func RowWinner(slots []string, mark string) bool {
+	rowCombinations := getPossibleRowCombinations(slots)
+	return checkCombinations(rowCombinations, slots, mark)
+}
+
+func allTrue(list []bool) bool {
+	for _, value := range list {
+		if value != true {
+			return false
+		}
+	}
+	return true
+}
+
+func checkCombinations(combinations [][]int, slots []string, mark string) bool {
+	for _, rowValue := range combinations {
+		result := make([]bool, getBoardSize(slots))
+		for index, value := range rowValue {
+			result[index] = slots[value] == mark
+		}
+		if allTrue(result) {
+			return true
+		}
+	}
+	return false
+}
+
+func getBoardSize(slots []string) int {
+	return int(math.Sqrt(float64(len(slots))))
+}
+
+func getPossibleColumnCombinations(slots []string) [][]int {
+	boardSize := getBoardSize(slots)
+	possibleColumnCombinations := make([][]int, boardSize)
+	for column := 0; column < boardSize; column++ {
+		possibleColumnCombinations[column] = make([]int, boardSize)
+		for position := 0; position < boardSize; position++ {
+			possibleColumnCombinations[column][position] = column + (position * boardSize)
+		}
+	}
+	return possibleColumnCombinations
+}
+
+func getPossibleDiagonalCombinations(slots []string) [][]int {
+	boardSize := getBoardSize(slots)
+	possibleDiagonalCombinations := make([][]int, 2)
+	for index := range possibleDiagonalCombinations {
+		possibleDiagonalCombinations[index] = make([]int, boardSize)
+	}
+	for position := 0; position < boardSize; position++ {
+		possibleDiagonalCombinations[0][position] = position * (boardSize + 1)
+		possibleDiagonalCombinations[1][position] = (position * (boardSize - 1)) + boardSize - 1
+	}
+	return possibleDiagonalCombinations
+}
+
+func getPossibleRowCombinations(slots []string) [][]int {
+	boardSize := getBoardSize(slots)
+	possibleRowCombinations := make([][]int, boardSize)
+	slotPosition := 0
+	for row := 0; row < boardSize; row++ {
+		possibleRowCombinations[row] = make([]int, boardSize)
+		for index := range possibleRowCombinations[row] {
+			possibleRowCombinations[row][index] = slotPosition
+			slotPosition += 1
+		}
+	}
+	return possibleRowCombinations
+}
