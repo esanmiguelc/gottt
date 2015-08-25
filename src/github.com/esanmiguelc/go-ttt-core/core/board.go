@@ -1,4 +1,4 @@
-package tttboard
+package core
 
 type Board struct {
 	Slots []string
