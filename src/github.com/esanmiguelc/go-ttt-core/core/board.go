@@ -4,7 +4,7 @@ type Board struct {
 	Slots []string
 }
 
-func createBoard(size int) Board {
+func NewBoard(size int) Board {
 	return Board{make([]string, size*size)}
 }
 

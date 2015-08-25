@@ -4,9 +4,9 @@ import (
 	math "math"
 )
 
-func MovesAvailable(slots []string) []int {
+func MovesAvailable(board Board) []int {
 	result := []int{}
-	for index, value := range slots {
+	for index, value := range board.Slots {
 		if value == "" {
 			result = append(result, index)
 		}
@@ -14,23 +14,23 @@ func MovesAvailable(slots []string) []int {
 	return result
 }
 
-func IsWinner(slots []string, mark string) bool {
-	return ColumnWinner(slots, mark) || DiagonalWinner(slots, mark) || RowWinner(slots, mark)
+func IsWinner(board Board, mark string) bool {
+	return ColumnWinner(board, mark) || DiagonalWinner(board, mark) || RowWinner(board, mark)
 }
 
-func ColumnWinner(slots []string, mark string) bool {
-	columnCombinations := getPossibleColumnCombinations(slots)
-	return checkCombinations(columnCombinations, slots, mark)
+func ColumnWinner(board Board, mark string) bool {
+	columnCombinations := getPossibleColumnCombinations(board.Slots)
+	return checkCombinations(columnCombinations, board.Slots, mark)
 }
 
-func DiagonalWinner(slots []string, mark string) bool {
-	diagonalCombinations := getPossibleDiagonalCombinations(slots)
-	return checkCombinations(diagonalCombinations, slots, mark)
+func DiagonalWinner(board Board, mark string) bool {
+	diagonalCombinations := getPossibleDiagonalCombinations(board.Slots)
+	return checkCombinations(diagonalCombinations, board.Slots, mark)
 }
 
-func RowWinner(slots []string, mark string) bool {
-	rowCombinations := getPossibleRowCombinations(slots)
-	return checkCombinations(rowCombinations, slots, mark)
+func RowWinner(board Board, mark string) bool {
+	rowCombinations := getPossibleRowCombinations(board.Slots)
+	return checkCombinations(rowCombinations, board.Slots, mark)
 }
 
 func allTrue(list []bool) bool {

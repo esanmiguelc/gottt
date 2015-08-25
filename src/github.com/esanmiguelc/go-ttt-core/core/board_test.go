@@ -6,17 +6,17 @@ import (
 )
 
 func TestItCreatesABoardWithTheCorrectSize(t *testing.T) {
-	board := createBoard(3)
+	board := NewBoard(3)
 	assert.Equal(t, 9, len(board.Slots))
 }
 
 func TestItCreatesAnEmptyBoard(t *testing.T) {
-	board := createBoard(3)
+	board := NewBoard(3)
 	assert.Equal(t, make([]string, 9), board.Slots)
 }
 
 func TestPlacesAMoveOnBoard(t *testing.T) {
-	board := createBoard(3)
+	board := NewBoard(3)
 	testBoard := make([]string, 9)
 	testBoard[0] = "x"
 	board.PlaceMove(0, "x")
