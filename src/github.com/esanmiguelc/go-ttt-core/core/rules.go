@@ -5,8 +5,27 @@ import (
 )
 
 const THREE_BY_THREE = 3
+const FOUR_BY_FOUR = 4
 const FIRST_PLAYER = "X"
 const SECOND_PLAYER = "O"
+
+func GetCurrentPlayer(board Board) string {
+	if getBoardSize(board.Slots)%3 == 0 {
+		if len(MovesAvailable(board))%2 == 0 {
+			return SECOND_PLAYER
+		}
+		return FIRST_PLAYER
+	} else {
+		if len(MovesAvailable(board))%3 == 0 {
+			return SECOND_PLAYER
+		}
+		return FIRST_PLAYER
+	}
+}
+
+func IsCurrentPlayer(board Board, mark string) bool {
+	return GetCurrentPlayer(board) == mark
+}
 
 func MovesAvailable(board Board) []int {
 	result := []int{}
@@ -20,6 +39,10 @@ func MovesAvailable(board Board) []int {
 
 func IsWinner(board Board, mark string) bool {
 	return ColumnWinner(board, mark) || DiagonalWinner(board, mark) || RowWinner(board, mark)
+}
+
+func IsGameOver(board Board, myMark, opponent string) bool {
+	return board.Full() || IsWinner(board, myMark) || IsWinner(board, opponent)
 }
 
 func ColumnWinner(board Board, mark string) bool {

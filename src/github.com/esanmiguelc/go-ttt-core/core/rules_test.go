@@ -95,17 +95,74 @@ func TestItHasAWinnerIfSameMarkInRightToLeftDiagonal(t *testing.T) {
 func TestItReturnsTrueWhenThereIsAWinningCombinationDiagonallyForMark(t *testing.T) {
 	board := CreateBoard(THREE_BY_THREE)
 	AddMarkToPositions(board, FIRST_PLAYER, 0, 4, 8)
-	assert.True(t, IsWinner(board, "X"))
+	assert.True(t, IsWinner(board, FIRST_PLAYER))
 }
 
 func TestItReturnsTrueWhenThereIsAWinningCombinationRowForMark(t *testing.T) {
 	board := CreateBoard(THREE_BY_THREE)
 	AddMarkToPositions(board, FIRST_PLAYER, 0, 1, 2)
-	assert.True(t, IsWinner(board, "X"))
+	assert.True(t, IsWinner(board, FIRST_PLAYER))
 }
 
 func TestItReturnsTrueWhenThereIsAWinningCombinationColumnForMark(t *testing.T) {
 	board := CreateBoard(THREE_BY_THREE)
 	AddMarkToPositions(board, FIRST_PLAYER, 0, 3, 6)
-	assert.True(t, IsWinner(board, "X"))
+	assert.True(t, IsWinner(board, FIRST_PLAYER))
+}
+
+func TestGameIsOverWhenBoardIsFull(t *testing.T) {
+	board := CreateBoard(THREE_BY_THREE)
+	AddMarkToPositions(board, FIRST_PLAYER, 0, 1, 2, 3, 4, 5, 6, 7, 8)
+	assert.True(t, IsGameOver(board, FIRST_PLAYER, SECOND_PLAYER))
+}
+
+func TestGameIsOverWhenFirstPlayerWins(t *testing.T) {
+	board := CreateBoard(THREE_BY_THREE)
+	AddMarkToPositions(board, FIRST_PLAYER, 0, 1, 2)
+	assert.True(t, IsGameOver(board, FIRST_PLAYER, SECOND_PLAYER))
+}
+
+func TestGameIsOverWhenSecondPlayerWins(t *testing.T) {
+	board := CreateBoard(THREE_BY_THREE)
+	AddMarkToPositions(board, SECOND_PLAYER, 0, 1, 2)
+	assert.True(t, IsGameOver(board, FIRST_PLAYER, SECOND_PLAYER))
+}
+
+func TestCurrentPlayerIsFirstPlayerForFirstMove(t *testing.T) {
+	board := CreateBoard(THREE_BY_THREE)
+	assert.Equal(t, FIRST_PLAYER, GetCurrentPlayer(board))
+}
+
+func TestCurrentPlayerIsSecondPlayer(t *testing.T) {
+	board := CreateBoard(THREE_BY_THREE)
+	AddMarkToPositions(board, FIRST_PLAYER, 0)
+	assert.Equal(t, SECOND_PLAYER, GetCurrentPlayer(board))
+}
+
+func TestCurrentPlayerIsFirstPlayerAfterTwoMoves(t *testing.T) {
+	board := CreateBoard(THREE_BY_THREE)
+	AddMarkToPositions(board, FIRST_PLAYER, 0)
+	AddMarkToPositions(board, SECOND_PLAYER, 1)
+	assert.Equal(t, FIRST_PLAYER, GetCurrentPlayer(board))
+}
+
+func TestCurrentPlayerIsFirstPlayerForFirstMoveOnFourByFour(t *testing.T) {
+	board := CreateBoard(FOUR_BY_FOUR)
+	AddMarkToPositions(board, FIRST_PLAYER, 0)
+	assert.Equal(t, SECOND_PLAYER, GetCurrentPlayer(board))
+}
+
+func TestCurrentPlayerIsSecondPlayerOnFourByFour(t *testing.T) {
+	board := CreateBoard(FOUR_BY_FOUR)
+	assert.Equal(t, FIRST_PLAYER, GetCurrentPlayer(board))
+}
+
+func TestIsNotCurrentPlayer(t *testing.T) {
+	board := CreateBoard(FOUR_BY_FOUR)
+	assert.False(t, IsCurrentPlayer(board, SECOND_PLAYER))
+}
+
+func TestIsCurrentPlayer(t *testing.T) {
+	board := CreateBoard(FOUR_BY_FOUR)
+	assert.True(t, IsCurrentPlayer(board, FIRST_PLAYER))
 }
