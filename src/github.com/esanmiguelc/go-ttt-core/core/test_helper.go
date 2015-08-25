@@ -1,8 +1,5 @@
 package core
 
-const THREE_BY_THREE = 3
-const FIRST_PLAYER = "X"
-
 func CreateBoard(size int) Board {
 	return NewBoard(size)
 }

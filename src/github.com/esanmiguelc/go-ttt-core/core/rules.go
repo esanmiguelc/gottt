@@ -4,6 +4,10 @@ import (
 	math "math"
 )
 
+const THREE_BY_THREE = 3
+const FIRST_PLAYER = "X"
+const SECOND_PLAYER = "O"
+
 func MovesAvailable(board Board) []int {
 	result := []int{}
 	for index, value := range board.Slots {
