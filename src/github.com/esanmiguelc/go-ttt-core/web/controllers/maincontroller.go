@@ -2,21 +2,28 @@ package controllers
 
 import (
 	"net/http"
+	"strings"
 	"text/template"
 
+	"github.com/esanmiguelc/go-ttt-core/core"
 	"github.com/esanmiguelc/go-ttt-core/web/config"
+	"github.com/esanmiguelc/go-ttt-core/web/viewmodels"
 	"github.com/julienschmidt/httprouter"
 )
 
-type ResultsViewModel struct {
-	Result string
-}
-
 func Game(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	if request.FormValue("GameState") == "012345678" {
+	// BuildGame(request.FormValue("FirstPlayer"), request.FormValue("SecondPlayer"), request.FormValue("GameState"))
+	requestFormState := request.FormValue("GameState")
+	splitState := strings.Split(requestFormState, "")
+	for index := range splitState {
+		splitState[index] = strings.Replace(splitState[index], " ", "", -1)
+	}
+	board := core.Board{Slots: splitState}
+	gameviewmodel := viewmodels.GameViewModel{State: splitState, PlayerOne: 1, PlayerTwo: 2}
+	if core.IsGameOver(board, "X", "O") {
 		http.Redirect(writer, request, config.RESULTS_PATH, http.StatusFound)
 	} else {
-		render("game", writer, nil)
+		render("game", writer, gameviewmodel)
 	}
 }
 
@@ -25,7 +32,7 @@ func Index(writer http.ResponseWriter, request *http.Request, params httprouter.
 }
 
 func Results(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	viewmodel := ResultsViewModel{Result: request.FormValue("Result")}
+	viewmodel := viewmodels.ResultsViewModel{Result: request.FormValue("Result")}
 	render("results", writer, viewmodel)
 }
 

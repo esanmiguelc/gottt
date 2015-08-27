@@ -18,7 +18,7 @@ func TestGameResponseIsOk(t *testing.T) {
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + config.GAME_PATH)
+	response, _ := http.Get(server.URL + config.GAME_PATH + "?GameState=++")
 	assert.Equal(t, http.StatusOK, response.StatusCode)
 }
 
@@ -28,7 +28,7 @@ func TestGameHasContent(t *testing.T) {
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + config.GAME_PATH)
+	response, _ := http.Get(server.URL + config.GAME_PATH + "?GameState=++")
 	html, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 	assert.True(t, strings.Contains(string(html), "Make a Move"))

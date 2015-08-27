@@ -1,5 +1,18 @@
 {{define "game"}}
 {{template "header"}}
-  <h1>Make a Move</h1>
+  <h1 class="text-center">Make a Move</h1>
+  {{range $index, $element := .State}}
+  <div class="col-xs-4 slot slot-{{$index}}">
+    {{if $element}}
+    <span>{{$element}}</span>
+    {{else}}
+    <form action="/game" method="get">
+      <input type="hidden" name="GameState" value="X">
+      <input type="hidden" name="SecondPlayer" value="X">
+      <input type="hidden" name="FirstPlayer" value="X">
+    </form>
+    {{end}}
+  </div>
+  {{end}}
 {{template "footer"}}
 {{end}}

@@ -1,18 +1,26 @@
 {{define "index"}}
 {{template "header"}}
+<h1 class="text-center">Welcome To Tic Tac Toe in Go</h1>
+<div class="col-lg-4 col-lg-offset-4">
     <form action="/game" method="get">
-    <label for="FirstPlayer"></label>
-    <select name="FirstPlayer" id="FirstPlayer">
+      <div class="form-group">
+    <label for="FirstPlayer">Select First Player:</label>
+    <select class="form-control" name="FirstPlayer" id="FirstPlayer">
       <option value="0">Human</option>
       <option value="1">Computer</option>
     </select>
-
-    <select name="SecondPlayer" id="SecondPlayer">
+      </div>
+      <div class="form-group">
+    <label for="SecondPlayer">Select Second Player:</label>
+    <select class="form-control" name="SecondPlayer" id="SecondPlayer">
       <option value="0">Human</option>
       <option value="1">Computer</option>
     </select>
-    <input type="hidden" name="GameState" value=""/>
-    <input type="submit" value="Start Game"/>
+      </div>
+    <input type="hidden" name="GameState" value="         "/>
+    <input type="submit" value="Start Game" class="btn btn-block btn-success"/>
     </form>
+</div>
 {{template "footer"}}
 {{end}}
+
