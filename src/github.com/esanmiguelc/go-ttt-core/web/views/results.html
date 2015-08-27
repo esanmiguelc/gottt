@@ -1,0 +1,9 @@
+{{define "results"}}
+{{template "header"}}
+{{if .Result }}
+<h1>The Results are in: {{.Result}} wins!</h1>
+{{ else }}
+<h1>The Results are in: it's a tie!</h1>
+{{end}}
+{{template "footer"}}
+{{end}}

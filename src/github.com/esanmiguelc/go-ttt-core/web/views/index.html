@@ -1,5 +1,5 @@
-<html>
-  <body>
+{{define "index"}}
+{{template "header"}}
     <form action="/game" method="get">
     <label for="FirstPlayer"></label>
     <select name="FirstPlayer" id="FirstPlayer">
@@ -14,5 +14,5 @@
     <input type="hidden" name="GameState" value=""/>
     <input type="submit" value="Start Game"/>
     </form>
-  </body>
-</html>
+{{template "footer"}}
+{{end}}

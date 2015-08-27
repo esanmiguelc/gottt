@@ -4,18 +4,32 @@ import (
 	"net/http"
 	"text/template"
 
+	"github.com/esanmiguelc/go-ttt-core/web/config"
 	"github.com/julienschmidt/httprouter"
 )
 
-func Index(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	render("index.html", writer, nil)
+type ResultsViewModel struct {
+	Result string
 }
 
 func Game(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	render("game.html", writer, nil)
+	if request.FormValue("GameState") == "012345678" {
+		http.Redirect(writer, request, config.RESULTS_PATH, http.StatusFound)
+	} else {
+		render("game", writer, nil)
+	}
+}
+
+func Index(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	render("index", writer, nil)
+}
+
+func Results(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	viewmodel := ResultsViewModel{Result: request.FormValue("Result")}
+	render("results", writer, viewmodel)
 }
 
 func render(viewName string, writer http.ResponseWriter, model interface{}) {
-	t, _ := template.ParseFiles("../views/" + viewName)
-	t.Execute(writer, model)
+	templates := template.Must(template.ParseGlob("../views/*"))
+	templates.ExecuteTemplate(writer, viewName, model)
 }
