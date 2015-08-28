@@ -37,7 +37,7 @@ func (player ImpossiblePlayer) IsComputer() bool {
 }
 
 func minimax(board Board, myMark, opponent string, minValue, maxValue int) int {
-	if IsGameOver(board, myMark, opponent) {
+	if IsGameOver(board) {
 		return Score(board, myMark, opponent)
 	}
 	possibleMoves := []Node{}

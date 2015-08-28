@@ -41,8 +41,8 @@ func IsWinner(board Board, mark string) bool {
 	return ColumnWinner(board, mark) || DiagonalWinner(board, mark) || RowWinner(board, mark)
 }
 
-func IsGameOver(board Board, myMark, opponent string) bool {
-	return board.Full() || IsWinner(board, myMark) || IsWinner(board, opponent)
+func IsGameOver(board Board) bool {
+	return board.Full() || IsWinner(board, FIRST_PLAYER) || IsWinner(board, SECOND_PLAYER)
 }
 
 func ColumnWinner(board Board, mark string) bool {
