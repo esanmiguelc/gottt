@@ -5,6 +5,7 @@ type GameState struct {
 	PlayerOneType string
 	PlayerTwoType string
 	BoardSize     int
+	BoardState    []string
 }
 
 func GameTick(playerOneType, playerTwoType string, boardSize int, movesPlayed []int) GameState {
@@ -19,6 +20,7 @@ func GameTick(playerOneType, playerTwoType string, boardSize int, movesPlayed []
 		PlayerOneType: playerOneType,
 		PlayerTwoType: playerTwoType,
 		BoardSize:     boardSize,
+		BoardState:    board.Slots,
 	}
 }
 

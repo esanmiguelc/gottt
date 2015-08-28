@@ -31,4 +31,5 @@ func TestGameStateHasTheRequiredFieldsToRebuildTheBoard(t *testing.T) {
 	assert.Equal(t, player1Type, gameState.PlayerOneType)
 	assert.Equal(t, player2Type, gameState.PlayerTwoType)
 	assert.Equal(t, THREE_BY_THREE, gameState.BoardSize)
+	assert.Equal(t, []string{"X", "O", "X", "", "", "", "", "", ""}, gameState.BoardState)
 }
