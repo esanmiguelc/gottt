@@ -2,28 +2,24 @@ package controllers
 
 import (
 	"net/http"
-	"strings"
 	"text/template"
 
 	"github.com/esanmiguelc/go-ttt-core/core"
-	"github.com/esanmiguelc/go-ttt-core/web/config"
+	"github.com/esanmiguelc/go-ttt-core/web/constants"
 	"github.com/esanmiguelc/go-ttt-core/web/viewmodels"
 	"github.com/julienschmidt/httprouter"
 )
 
 func Game(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	// BuildGame(request.FormValue("FirstPlayer"), request.FormValue("SecondPlayer"), request.FormValue("GameState"))
-	requestFormState := request.FormValue("GameState")
-	splitState := strings.Split(requestFormState, "")
-	for index := range splitState {
-		splitState[index] = strings.Replace(splitState[index], " ", "", -1)
-	}
-	board := core.Board{Slots: splitState}
-	gameviewmodel := viewmodels.GameViewModel{State: splitState, PlayerOne: 1, PlayerTwo: 2}
-	if core.IsGameOver(board, "X", "O") {
-		http.Redirect(writer, request, config.RESULTS_PATH, http.StatusFound)
+	playerOneType := request.FormValue("PlayerOne")
+	playerTwoType := request.FormValue("PlayerTwo")
+	boardSize := request.FormValue("BoardSize")
+	movesPlayed := request.FormValue("MovesPlayed")
+	gameState := core.GameTick(playerOneType, PlayerTwoType, boardSize, movesPlayed)
+	if core.IsGameOver(gameState) {
+		http.Redirect(writer, request, constants.RESULTS_PATH, http.StatusFound)
 	} else {
-		render("game", writer, gameviewmodel)
+		render("game", writer, gameState)
 	}
 }
 

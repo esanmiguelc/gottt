@@ -7,28 +7,28 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/esanmiguelc/go-ttt-core/web/config"
+	"github.com/esanmiguelc/go-ttt-core/web/constants"
 	"github.com/julienschmidt/httprouter"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGameResponseIsOk(t *testing.T) {
 	router := httprouter.New()
-	router.GET(config.GAME_PATH, Game)
+	router.GET(constants.GAME_PATH, Game)
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + config.GAME_PATH + "?GameState=++")
+	response, _ := http.Get(server.URL + constants.GAME_PATH + "?GameState=++")
 	assert.Equal(t, http.StatusOK, response.StatusCode)
 }
 
 func TestGameHasContent(t *testing.T) {
 	router := httprouter.New()
-	router.GET(config.GAME_PATH, Game)
+	router.GET(constants.GAME_PATH, Game)
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + config.GAME_PATH + "?GameState=++")
+	response, _ := http.Get(server.URL + constants.GAME_PATH + "?GameState=++")
 	html, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 	assert.True(t, strings.Contains(string(html), "Make a Move"))
