@@ -36,18 +36,18 @@ func TestGameHasContent(t *testing.T) {
 
 func TestGameRedirectsWhenGameIsOver(t *testing.T) {
 	router := httprouter.New()
-	router.GET(config.GAME_PATH, Game)
-	router.GET(config.RESULTS_PATH, Results)
+	router.GET(constants.GAME_PATH, Game)
+	router.GET(constants.RESULTS_PATH, Results)
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + config.GAME_PATH + "?FirstPlayer=1&SecondPlayer=1&GameState=012345678")
-	assert.Equal(t, server.URL+config.RESULTS_PATH, response.Request.URL.String())
+	response, _ := http.Get(server.URL + constants.GAME_PATH + "?FirstPlayer=1&SecondPlayer=1&GameState=012345678")
+	assert.Equal(t, server.URL+constants.RESULTS_PATH, response.Request.URL.String())
 }
 
 func TestIndexResponseIsOk(t *testing.T) {
 	router := httprouter.New()
-	router.GET(config.ROOT_PATH, Index)
+	router.GET(constants.ROOT_PATH, Index)
 	server := httptest.NewServer(router)
 	defer server.Close()
 
@@ -57,7 +57,7 @@ func TestIndexResponseIsOk(t *testing.T) {
 
 func TestIndexHasButtonToStartGame(t *testing.T) {
 	router := httprouter.New()
-	router.GET(config.ROOT_PATH, Index)
+	router.GET(constants.ROOT_PATH, Index)
 	server := httptest.NewServer(router)
 	defer server.Close()
 
@@ -69,21 +69,21 @@ func TestIndexHasButtonToStartGame(t *testing.T) {
 
 func TestResultsPageIsOk(t *testing.T) {
 	router := httprouter.New()
-	router.GET(config.RESULTS_PATH, Results)
+	router.GET(constants.RESULTS_PATH, Results)
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + config.RESULTS_PATH + "?result=tie")
+	response, _ := http.Get(server.URL + constants.RESULTS_PATH + "?result=tie")
 	assert.Equal(t, http.StatusOK, response.StatusCode)
 }
 
 func TestResultsPageContainsTieResult(t *testing.T) {
 	router := httprouter.New()
-	router.GET(config.RESULTS_PATH, Results)
+	router.GET(constants.RESULTS_PATH, Results)
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + config.RESULTS_PATH)
+	response, _ := http.Get(server.URL + constants.RESULTS_PATH)
 	html, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 	assert.True(t, strings.Contains(string(html), "tie"))
@@ -91,11 +91,11 @@ func TestResultsPageContainsTieResult(t *testing.T) {
 
 func TestResultsPageContainsWinResult(t *testing.T) {
 	router := httprouter.New()
-	router.GET(config.RESULTS_PATH, Results)
+	router.GET(constants.RESULTS_PATH, Results)
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + config.RESULTS_PATH + "?Result=X")
+	response, _ := http.Get(server.URL + constants.RESULTS_PATH + "?Result=X")
 	html, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 	assert.True(t, strings.Contains(string(html), "X wins"))
