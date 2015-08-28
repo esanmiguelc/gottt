@@ -6,18 +6,19 @@
       <div class="form-group">
     <label for="FirstPlayer">Select First Player:</label>
     <select class="form-control" name="FirstPlayer" id="FirstPlayer">
-      <option value="0">Human</option>
-      <option value="1">Computer</option>
+      <option value="Human">Human</option>
+      <option value="Computer">Computer</option>
     </select>
       </div>
       <div class="form-group">
     <label for="SecondPlayer">Select Second Player:</label>
     <select class="form-control" name="SecondPlayer" id="SecondPlayer">
-      <option value="0">Human</option>
-      <option value="1">Computer</option>
+      <option value="Human">Human</option>
+      <option value="Computer">Computer</option>
     </select>
       </div>
-    <input type="hidden" name="GameState" value="         "/>
+    <input type="hidden" name="MovesPlayed" value=""/>
+    <input type="hidden" name="BoardSize" value="3"/>
     <input type="submit" value="Start Game" class="btn btn-block btn-success"/>
     </form>
 </div>

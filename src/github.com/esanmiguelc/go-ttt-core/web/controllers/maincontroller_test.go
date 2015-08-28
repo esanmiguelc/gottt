@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/julienschmidt/httprouter"
+	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/stretchr/testify/assert"
 	"github.com/esanmiguelc/go-ttt-core/web/constants"
-	"github.com/julienschmidt/httprouter"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestGameResponseIsOk(t *testing.T) {
@@ -18,7 +18,7 @@ func TestGameResponseIsOk(t *testing.T) {
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + constants.GAME_PATH + "?GameState=++")
+	response, _ := http.Get(server.URL + constants.GAME_PATH + "?FirstPlayer=Human&SecondPlayer=Human&BoardSize=3&MovesPlayed=012")
 	assert.Equal(t, http.StatusOK, response.StatusCode)
 }
 
@@ -28,7 +28,8 @@ func TestGameHasContent(t *testing.T) {
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + constants.GAME_PATH + "?GameState=++")
+	response, _ := http.Get(server.URL + constants.GAME_PATH + "?FirstPlayer=Human&SecondPlayer=Human&BoardSize=3&MovesPlayed=012")
+
 	html, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 	assert.True(t, strings.Contains(string(html), "Make a Move"))
@@ -41,7 +42,7 @@ func TestGameRedirectsWhenGameIsOver(t *testing.T) {
 	server := httptest.NewServer(router)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + constants.GAME_PATH + "?FirstPlayer=1&SecondPlayer=1&GameState=012345678")
+	response, _ := http.Get(server.URL + constants.GAME_PATH + "?FirstPlayer=Human&SecondPlayer=Human&BoardSize=3&MovesPlayed=01438")
 	assert.Equal(t, server.URL+constants.RESULTS_PATH, response.Request.URL.String())
 }
 

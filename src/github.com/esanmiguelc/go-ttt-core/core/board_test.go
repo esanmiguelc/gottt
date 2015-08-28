@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/stretchr/testify/assert"
+	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/stretchr/testify/assert"
 	"testing"
 )
 

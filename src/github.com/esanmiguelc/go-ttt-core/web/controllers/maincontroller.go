@@ -2,21 +2,30 @@ package controllers
 
 import (
 	"net/http"
+	"path"
+	"runtime"
+	"strconv"
+	"strings"
 	"text/template"
 
+	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/julienschmidt/httprouter"
 	"github.com/esanmiguelc/go-ttt-core/core"
 	"github.com/esanmiguelc/go-ttt-core/web/constants"
 	"github.com/esanmiguelc/go-ttt-core/web/viewmodels"
-	"github.com/julienschmidt/httprouter"
 )
 
 func Game(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	playerOneType := request.FormValue("PlayerOne")
-	playerTwoType := request.FormValue("PlayerTwo")
-	boardSize := request.FormValue("BoardSize")
-	movesPlayed := request.FormValue("MovesPlayed")
-	gameState := core.GameTick(playerOneType, PlayerTwoType, boardSize, movesPlayed)
-	if core.IsGameOver(gameState) {
+	playerOneType := request.FormValue("FirstPlayer")
+	playerTwoType := request.FormValue("SecondPlayer")
+	boardSize, _ := strconv.Atoi(request.FormValue("BoardSize"))
+	someVar := strings.Split(request.FormValue("MovesPlayed"), "")
+	var movesPlayed []int
+	for _, elem := range someVar {
+		element, _ := strconv.Atoi(elem)
+		movesPlayed = append(movesPlayed, element)
+	}
+	gameState := core.GameTick(playerOneType, playerTwoType, boardSize, movesPlayed)
+	if core.IsGameOver(gameState.Board) {
 		http.Redirect(writer, request, constants.RESULTS_PATH, http.StatusFound)
 	} else {
 		render("game", writer, gameState)
@@ -33,6 +42,8 @@ func Results(writer http.ResponseWriter, request *http.Request, params httproute
 }
 
 func render(viewName string, writer http.ResponseWriter, model interface{}) {
-	templates := template.Must(template.ParseGlob("../views/*"))
+	_, filename, _, _ := runtime.Caller(1)
+	f := path.Join(path.Dir(filename), "../views/*")
+	templates := template.Must(template.ParseGlob(f))
 	templates.ExecuteTemplate(writer, viewName, model)
 }

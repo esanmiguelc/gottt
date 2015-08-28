@@ -43,7 +43,7 @@ func minimax(board Board, myMark, opponent string, minValue, maxValue int) int {
 	possibleMoves := []Node{}
 
 	for _, position := range MovesAvailable(board) {
-		board.PlaceMove(position, GetCurrentPlayer(board))
+		board.PlaceMove(position, GetCurrentMark(board))
 		score := minimax(board, myMark, opponent, minValue, maxValue)
 		node := Node{Score: score, Position: position}
 
