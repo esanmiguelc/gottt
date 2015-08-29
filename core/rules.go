@@ -9,22 +9,34 @@ const FOUR_BY_FOUR = 4
 const FIRST_PLAYER = "X"
 const SECOND_PLAYER = "O"
 
-func GetCurrentPlayer(board Board) string {
+func GetCurrentMark(board Board) string {
+	movesAvailableCount := len(MovesAvailable(board))
 	if getBoardSize(board.Slots)%3 == 0 {
-		if len(MovesAvailable(board))%2 == 0 {
-			return SECOND_PLAYER
-		}
-		return FIRST_PLAYER
+		return boardDivisibleBy(movesAvailableCount, 2)
 	} else {
-		if len(MovesAvailable(board))%3 == 0 {
-			return SECOND_PLAYER
-		}
-		return FIRST_PLAYER
+		return boardDivisibleBy(movesAvailableCount, 3)
 	}
 }
 
+func boardDivisibleBy(moveCount, num int) string {
+	if moveCount%num == 0 {
+		return SECOND_PLAYER
+	}
+	return FIRST_PLAYER
+}
+
+func GetCurrentPlayer(board Board, playerOne, playerTwo Player) Player {
+	var currentPlayer Player
+	if IsCurrentPlayer(board, playerOne.GetMark()) {
+		currentPlayer = playerOne
+	} else {
+		currentPlayer = playerTwo
+	}
+	return currentPlayer
+}
+
 func IsCurrentPlayer(board Board, mark string) bool {
-	return GetCurrentPlayer(board) == mark
+	return GetCurrentMark(board) == mark
 }
 
 func MovesAvailable(board Board) []int {
@@ -41,8 +53,8 @@ func IsWinner(board Board, mark string) bool {
 	return ColumnWinner(board, mark) || DiagonalWinner(board, mark) || RowWinner(board, mark)
 }
 
-func IsGameOver(board Board, myMark, opponent string) bool {
-	return board.Full() || IsWinner(board, myMark) || IsWinner(board, opponent)
+func IsGameOver(board Board) bool {
+	return board.Full() || IsWinner(board, FIRST_PLAYER) || IsWinner(board, SECOND_PLAYER)
 }
 
 func ColumnWinner(board Board, mark string) bool {

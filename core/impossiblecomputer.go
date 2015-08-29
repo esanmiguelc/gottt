@@ -10,6 +10,18 @@ type Node struct {
 	Position int
 }
 
+type ImpossiblePlayer struct {
+	Mark string
+}
+
+func (player ImpossiblePlayer) GetMark() string {
+	return player.Mark
+}
+
+func (player ImpossiblePlayer) GetMove(board Board, myMark, opponent string) int {
+	minimax(board, myMark, opponent, MIN_INT, MAX_INT)
+	return move
+}
 func Score(board Board, myMark, opponent string) int {
 	if IsWinner(board, myMark) {
 		return 10
@@ -20,19 +32,18 @@ func Score(board Board, myMark, opponent string) int {
 	}
 }
 
-func GetMove(board Board, myMark, opponent string) int {
-	minimax(board, myMark, opponent, MIN_INT, MAX_INT)
-	return move
+func (player ImpossiblePlayer) IsComputer() bool {
+	return true
 }
 
 func minimax(board Board, myMark, opponent string, minValue, maxValue int) int {
-	if IsGameOver(board, myMark, opponent) {
+	if IsGameOver(board) {
 		return Score(board, myMark, opponent)
 	}
 	possibleMoves := []Node{}
 
 	for _, position := range MovesAvailable(board) {
-		board.PlaceMove(position, GetCurrentPlayer(board))
+		board.PlaceMove(position, GetCurrentMark(board))
 		score := minimax(board, myMark, opponent, minValue, maxValue)
 		node := Node{Score: score, Position: position}
 

@@ -1,8 +1,9 @@
 package core
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/stretchr/testify/assert"
 )
 
 func TestScoreWhenNeitherPlayerWins(t *testing.T) {
@@ -24,25 +25,34 @@ func TestScoreWhenOpponentWins(t *testing.T) {
 
 func TestGetsTheFirstMove(t *testing.T) {
 	board := CreateBoard(3)
-	assert.Equal(t, 0, GetMove(board, FIRST_PLAYER, SECOND_PLAYER))
+	impossiblePlayer := ImpossiblePlayer{Mark: SECOND_PLAYER}
+	assert.Equal(t, 0, impossiblePlayer.GetMove(board, FIRST_PLAYER, SECOND_PLAYER))
 }
 
 func TestGetsTheCenterMove(t *testing.T) {
 	board := CreateBoard(3)
+	impossiblePlayer := ImpossiblePlayer{Mark: SECOND_PLAYER}
 	AddMarkToPositions(board, FIRST_PLAYER, 0)
-	assert.Equal(t, 4, GetMove(board, SECOND_PLAYER, FIRST_PLAYER))
+	assert.Equal(t, 4, impossiblePlayer.GetMove(board, SECOND_PLAYER, FIRST_PLAYER))
 }
 
 func TestBlocksAWin(t *testing.T) {
 	board := CreateBoard(3)
+	impossiblePlayer := ImpossiblePlayer{Mark: SECOND_PLAYER}
 	AddMarkToPositions(board, FIRST_PLAYER, 0, 2, 5, 7)
 	AddMarkToPositions(board, SECOND_PLAYER, 1, 4, 3)
-	assert.Equal(t, 8, GetMove(board, SECOND_PLAYER, FIRST_PLAYER))
+	assert.Equal(t, 8, impossiblePlayer.GetMove(board, SECOND_PLAYER, FIRST_PLAYER))
 }
 
 func TestGoesForTheWin(t *testing.T) {
 	board := CreateBoard(3)
+	impossiblePlayer := ImpossiblePlayer{Mark: SECOND_PLAYER}
 	AddMarkToPositions(board, FIRST_PLAYER, 0, 5, 2)
 	AddMarkToPositions(board, SECOND_PLAYER, 1, 4)
-	assert.Equal(t, 7, GetMove(board, SECOND_PLAYER, FIRST_PLAYER))
+	assert.Equal(t, 7, impossiblePlayer.GetMove(board, SECOND_PLAYER, FIRST_PLAYER))
+}
+
+func TestNewImpossibleComputer(t *testing.T) {
+	impossiblePlayer := ImpossiblePlayer{Mark: FIRST_PLAYER}
+	assert.True(t, impossiblePlayer.IsComputer())
 }

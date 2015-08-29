@@ -1,8 +1,9 @@
 package core
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/stretchr/testify/assert"
 )
 
 func TestAllMovesAvailableWhenBoardIsEmpty(t *testing.T) {
@@ -113,48 +114,48 @@ func TestItReturnsTrueWhenThereIsAWinningCombinationColumnForMark(t *testing.T) 
 func TestGameIsOverWhenBoardIsFull(t *testing.T) {
 	board := CreateBoard(THREE_BY_THREE)
 	AddMarkToPositions(board, FIRST_PLAYER, 0, 1, 2, 3, 4, 5, 6, 7, 8)
-	assert.True(t, IsGameOver(board, FIRST_PLAYER, SECOND_PLAYER))
+	assert.True(t, IsGameOver(board))
 }
 
 func TestGameIsOverWhenFirstPlayerWins(t *testing.T) {
 	board := CreateBoard(THREE_BY_THREE)
 	AddMarkToPositions(board, FIRST_PLAYER, 0, 1, 2)
-	assert.True(t, IsGameOver(board, FIRST_PLAYER, SECOND_PLAYER))
+	assert.True(t, IsGameOver(board))
 }
 
 func TestGameIsOverWhenSecondPlayerWins(t *testing.T) {
 	board := CreateBoard(THREE_BY_THREE)
 	AddMarkToPositions(board, SECOND_PLAYER, 0, 1, 2)
-	assert.True(t, IsGameOver(board, FIRST_PLAYER, SECOND_PLAYER))
+	assert.True(t, IsGameOver(board))
 }
 
 func TestCurrentPlayerIsFirstPlayerForFirstMove(t *testing.T) {
 	board := CreateBoard(THREE_BY_THREE)
-	assert.Equal(t, FIRST_PLAYER, GetCurrentPlayer(board))
+	assert.Equal(t, FIRST_PLAYER, GetCurrentMark(board))
 }
 
 func TestCurrentPlayerIsSecondPlayer(t *testing.T) {
 	board := CreateBoard(THREE_BY_THREE)
 	AddMarkToPositions(board, FIRST_PLAYER, 0)
-	assert.Equal(t, SECOND_PLAYER, GetCurrentPlayer(board))
+	assert.Equal(t, SECOND_PLAYER, GetCurrentMark(board))
 }
 
 func TestCurrentPlayerIsFirstPlayerAfterTwoMoves(t *testing.T) {
 	board := CreateBoard(THREE_BY_THREE)
 	AddMarkToPositions(board, FIRST_PLAYER, 0)
 	AddMarkToPositions(board, SECOND_PLAYER, 1)
-	assert.Equal(t, FIRST_PLAYER, GetCurrentPlayer(board))
+	assert.Equal(t, FIRST_PLAYER, GetCurrentMark(board))
 }
 
 func TestCurrentPlayerIsFirstPlayerForFirstMoveOnFourByFour(t *testing.T) {
 	board := CreateBoard(FOUR_BY_FOUR)
 	AddMarkToPositions(board, FIRST_PLAYER, 0)
-	assert.Equal(t, SECOND_PLAYER, GetCurrentPlayer(board))
+	assert.Equal(t, SECOND_PLAYER, GetCurrentMark(board))
 }
 
 func TestCurrentPlayerIsSecondPlayerOnFourByFour(t *testing.T) {
 	board := CreateBoard(FOUR_BY_FOUR)
-	assert.Equal(t, FIRST_PLAYER, GetCurrentPlayer(board))
+	assert.Equal(t, FIRST_PLAYER, GetCurrentMark(board))
 }
 
 func TestIsNotCurrentPlayer(t *testing.T) {
@@ -165,4 +166,11 @@ func TestIsNotCurrentPlayer(t *testing.T) {
 func TestIsCurrentPlayer(t *testing.T) {
 	board := CreateBoard(FOUR_BY_FOUR)
 	assert.True(t, IsCurrentPlayer(board, FIRST_PLAYER))
+}
+
+func TestGetCurrentPlayer(t *testing.T) {
+	board := CreateBoard(THREE_BY_THREE)
+	playerOne := HumanPlayer{Mark: FIRST_PLAYER}
+	playerTwo := HumanPlayer{Mark: SECOND_PLAYER}
+	assert.Equal(t, playerOne, GetCurrentPlayer(board, playerOne, playerTwo))
 }
