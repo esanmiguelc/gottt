@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"net/http"
-	"path"
 	"runtime"
+	"path"
 	"strconv"
 	"strings"
 	"text/template"
