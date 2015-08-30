@@ -43,7 +43,7 @@ func TestGameRedirectsWhenGameIsOver(t *testing.T) {
 	defer server.Close()
 
 	response, _ := http.Get(server.URL + constants.GAME_PATH + "?FirstPlayer=Human&SecondPlayer=Human&BoardSize=3&MovesPlayed=01438")
-	assert.Equal(t, server.URL+constants.RESULTS_PATH, response.Request.URL.String())
+	assert.Equal(t, server.URL+constants.RESULTS_PATH+"?Result=X", response.Request.URL.String())
 }
 
 func TestIndexResponseIsOk(t *testing.T) {

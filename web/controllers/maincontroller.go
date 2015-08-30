@@ -26,7 +26,13 @@ func Game(writer http.ResponseWriter, request *http.Request, params httprouter.P
 	}
 	gameState := core.GameTick(playerOneType, playerTwoType, boardSize, movesPlayed)
 	if core.IsGameOver(gameState.Board) {
-		http.Redirect(writer, request, constants.RESULTS_PATH+"?result=X", http.StatusFound)
+		if core.IsWinner(gameState.Board, core.FIRST_PLAYER) {
+			http.Redirect(writer, request, constants.RESULTS_PATH+"?Result="+core.FIRST_PLAYER, http.StatusFound)
+		} else if core.IsWinner(gameState.Board, core.SECOND_PLAYER) {
+			http.Redirect(writer, request, constants.RESULTS_PATH+"Result="+core.SECOND_PLAYER, http.StatusFound)
+		} else {
+			http.Redirect(writer, request, constants.RESULTS_PATH, http.StatusFound)
+		}
 	} else {
 		render("game", writer, gameState)
 	}
