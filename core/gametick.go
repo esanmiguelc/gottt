@@ -1,15 +1,5 @@
 package core
 
-type GameState struct {
-	MovesPlayed   []int
-	PlayerOneType string
-	PlayerTwoType string
-	CurrentPlayer Player
-	BoardSize     int
-	BoardState    []string
-	Board         Board
-}
-
 func GameTick(playerOneType, playerTwoType string, boardSize int, movesPlayed []int) GameState {
 	playerOne := createFirstPlayer(playerOneType)
 	playerTwo := createSecondPlayer(playerTwoType)
