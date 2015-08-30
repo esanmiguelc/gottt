@@ -1,9 +1,7 @@
 # Go TTT
 
 ## Demo
-Visit:
-
-    52.0.207.158:8080
+Visit: [52.0.207.158:8080](http://52.0.207.158:8080)
     
 ## Setting Up
 *Note: (follow all of the steps instead of using `git clone` )*
