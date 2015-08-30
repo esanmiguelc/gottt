@@ -1,8 +1,9 @@
 package core
 
 import (
-	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestItCreatesABoardWithTheCorrectSize(t *testing.T) {

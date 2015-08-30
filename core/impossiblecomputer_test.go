@@ -3,7 +3,7 @@ package core
 import (
 	"testing"
 
-	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestScoreWhenNeitherPlayerWins(t *testing.T) {

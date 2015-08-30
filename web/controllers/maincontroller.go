@@ -2,16 +2,16 @@ package controllers
 
 import (
 	"net/http"
-	"runtime"
 	"path"
+	"runtime"
 	"strconv"
 	"strings"
 	"text/template"
 
-	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/julienschmidt/httprouter"
-	"github.com/esanmiguelc/go-ttt-core/core"
-	"github.com/esanmiguelc/go-ttt-core/web/constants"
-	"github.com/esanmiguelc/go-ttt-core/web/viewmodels"
+	"github.com/esanmiguelc/gottt/core"
+	"github.com/esanmiguelc/gottt/web/constants"
+	"github.com/esanmiguelc/gottt/web/viewmodels"
+	"github.com/julienschmidt/httprouter"
 )
 
 func Game(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -26,7 +26,7 @@ func Game(writer http.ResponseWriter, request *http.Request, params httprouter.P
 	}
 	gameState := core.GameTick(playerOneType, playerTwoType, boardSize, movesPlayed)
 	if core.IsGameOver(gameState.Board) {
-		http.Redirect(writer, request, constants.RESULTS_PATH, http.StatusFound)
+		http.Redirect(writer, request, constants.RESULTS_PATH+"?result=X", http.StatusFound)
 	} else {
 		render("game", writer, gameState)
 	}

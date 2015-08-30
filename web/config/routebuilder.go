@@ -1,9 +1,9 @@
 package config
 
 import (
-	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/julienschmidt/httprouter"
-	"github.com/esanmiguelc/go-ttt-core/web/constants"
-	"github.com/esanmiguelc/go-ttt-core/web/controllers"
+	"github.com/esanmiguelc/gottt/web/constants"
+	"github.com/esanmiguelc/gottt/web/controllers"
+	"github.com/julienschmidt/httprouter"
 )
 
 func Init() *httprouter.Router {

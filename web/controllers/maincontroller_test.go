@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/julienschmidt/httprouter"
-	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/stretchr/testify/assert"
-	"github.com/esanmiguelc/go-ttt-core/web/constants"
+	"github.com/esanmiguelc/gottt/web/constants"
+	"github.com/julienschmidt/httprouter"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGameResponseIsOk(t *testing.T) {
