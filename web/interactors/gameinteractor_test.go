@@ -17,6 +17,11 @@ func TestItReturnsErrorIfBoardIsNotThree(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
+func TestItReturnsErrorIfInputForThreeByThreeIsNine(t *testing.T) {
+	_, _, _, err := ExecuteGameInteractor(core.HUMAN, core.COMPUTER, "3", "9")
+	assert.NotNil(t, err)
+}
+
 func TestItReturnsErrorIfItCantParseBoardSize(t *testing.T) {
 	_, _, _, err := ExecuteGameInteractor(core.HUMAN, core.COMPUTER, "T", "0")
 	assert.NotNil(t, err)

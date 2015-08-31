@@ -13,13 +13,22 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+func Error(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.WriteHeader(500)
+	render("error", writer, nil)
+}
+
 func Game(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	gameState, isGameOver, result, _ := interactors.ExecuteGameInteractor(
+	gameState, isGameOver, result, err := interactors.ExecuteGameInteractor(
 		request.FormValue("FirstPlayer"),
 		request.FormValue("SecondPlayer"),
 		request.FormValue("BoardSize"),
 		request.FormValue("MovesPlayed"),
 	)
+
+	if err != nil {
+		http.Redirect(writer, request, constants.ERROR_PATH, http.StatusFound)
+	}
 
 	if isGameOver {
 		http.Redirect(writer, request, constants.RESULTS_PATH+"?Result="+result, http.StatusFound)

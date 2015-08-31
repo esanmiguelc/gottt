@@ -8,6 +8,7 @@ import (
 
 func Init() *httprouter.Router {
 	router := httprouter.New()
+	router.GET(constants.ERROR_PATH, controllers.Error)
 	router.GET(constants.ROOT_PATH, controllers.Index)
 	router.GET(constants.GAME_PATH, controllers.Game)
 	router.GET(constants.RESULTS_PATH, controllers.Results)

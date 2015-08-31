@@ -8,8 +8,6 @@ import (
 	"github.com/esanmiguelc/gottt/core"
 )
 
-var emptyState, gameErrors = core.GameState{}, errors.New("Oops! Something went wrong parsing the board size")
-
 func ExecuteGameInteractor(playerOneType,
 	playerTwoType,
 	boardSize,
@@ -17,11 +15,15 @@ func ExecuteGameInteractor(playerOneType,
 
 	boardSizeAsInt, boardError := strconv.Atoi(boardSize)
 	if isValidPlayerType(playerOneType) || isValidPlayerType(playerTwoType) {
-		return emptyState, false, "", gameErrors
+		return errorResult()
 	}
 
 	if boardError != nil || boardSizeAsInt != core.THREE_BY_THREE {
-		return emptyState, false, "", gameErrors
+		return errorResult()
+	}
+
+	if strings.ContainsAny(movesPlayed, "9") {
+		return errorResult()
 	}
 
 	movesPlayedAsArray := convertMovesPlayed(movesPlayed)
@@ -53,4 +55,8 @@ func convertMovesPlayed(moves string) []int {
 	}
 
 	return movesPlayed
+}
+
+func errorResult() (core.GameState, bool, string, error) {
+	return core.GameState{}, false, "", errors.New("Oops! Something went wrong!")
 }
