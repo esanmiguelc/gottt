@@ -13,22 +13,37 @@ var emptyState, gameErrors = core.GameState{}, errors.New("Oops! Something went 
 func ExecuteGameInteractor(playerOneType,
 	playerTwoType,
 	boardSize,
-	movesPlayed string) (core.GameState, error) {
+	movesPlayed string) (core.GameState, bool, string, error) {
+
 	boardSizeAsInt, boardError := strconv.Atoi(boardSize)
 	if isValidPlayerType(playerOneType) || isValidPlayerType(playerTwoType) {
-		return emptyState, gameErrors
+		return emptyState, false, "", gameErrors
 	}
+
 	if boardError != nil || boardSizeAsInt != core.THREE_BY_THREE {
-		return emptyState, gameErrors
+		return emptyState, false, "", gameErrors
 	}
+
 	movesPlayedAsArray := convertMovesPlayed(movesPlayed)
 	gameState := core.GameTick(playerOneType, playerTwoType, boardSizeAsInt, movesPlayedAsArray)
-	return gameState, nil
+
+	if core.IsGameOver(gameState.Board) {
+		if core.IsWinner(gameState.Board, core.FIRST_PLAYER) {
+			return gameState, true, core.FIRST_PLAYER, nil
+		} else if core.IsWinner(gameState.Board, core.SECOND_PLAYER) {
+			return gameState, true, core.SECOND_PLAYER, nil
+		} else {
+			return gameState, true, "Tie", nil
+		}
+	} else {
+		return gameState, false, "", nil
+	}
 }
 
 func isValidPlayerType(playerType string) bool {
 	return playerType != core.HUMAN && playerType != core.COMPUTER
 }
+
 func convertMovesPlayed(moves string) []int {
 	splitMoves := strings.Split(moves, "")
 	var movesPlayed []int

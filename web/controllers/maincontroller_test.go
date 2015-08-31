@@ -12,6 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type controllerAction func(http.ResponseWriter, *http.Request, httprouter.Params)
+
 func TestGameResponseIsOk(t *testing.T) {
 	router := httprouter.New()
 	router.GET(constants.GAME_PATH, Game)
@@ -69,9 +71,7 @@ func TestIndexHasButtonToStartGame(t *testing.T) {
 }
 
 func TestResultsPageIsOk(t *testing.T) {
-	router := httprouter.New()
-	router.GET(constants.RESULTS_PATH, Results)
-	server := httptest.NewServer(router)
+	server := createServer(constants.RESULTS_PATH, Results)
 	defer server.Close()
 
 	response, _ := http.Get(server.URL + constants.RESULTS_PATH + "?result=tie")
@@ -79,9 +79,7 @@ func TestResultsPageIsOk(t *testing.T) {
 }
 
 func TestResultsPageContainsTieResult(t *testing.T) {
-	router := httprouter.New()
-	router.GET(constants.RESULTS_PATH, Results)
-	server := httptest.NewServer(router)
+	server := createServer(constants.RESULTS_PATH, Results)
 	defer server.Close()
 
 	response, _ := http.Get(server.URL + constants.RESULTS_PATH)
@@ -91,13 +89,27 @@ func TestResultsPageContainsTieResult(t *testing.T) {
 }
 
 func TestResultsPageContainsWinResult(t *testing.T) {
-	router := httprouter.New()
-	router.GET(constants.RESULTS_PATH, Results)
-	server := httptest.NewServer(router)
+	server := createServer(constants.RESULTS_PATH, Results)
 	defer server.Close()
 
 	response, _ := http.Get(server.URL + constants.RESULTS_PATH + "?Result=X")
 	html, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 	assert.True(t, strings.Contains(string(html), "X wins"))
+}
+
+func TestRedirectsIfItThereAreErrors(t *testing.T) {
+	server := createServer(constants.RESULTS_PATH, Results)
+	defer server.Close()
+
+	response, _ := http.Get(server.URL + constants.RESULTS_PATH + "?Result=X")
+	html, _ := ioutil.ReadAll(response.Body)
+	response.Body.Close()
+	assert.True(t, strings.Contains(string(html), "X wins"))
+}
+
+func createServer(path string, fn controllerAction) *httptest.Server {
+	router := httprouter.New()
+	router.GET(constants.RESULTS_PATH, Results)
+	return httptest.NewServer(router)
 }
