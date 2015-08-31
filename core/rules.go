@@ -8,6 +8,8 @@ const THREE_BY_THREE = 3
 const FOUR_BY_FOUR = 4
 const FIRST_PLAYER = "X"
 const SECOND_PLAYER = "O"
+const HUMAN = "Human"
+const COMPUTER = "Computer"
 
 func GetCurrentMark(board Board) string {
 	movesAvailableCount := len(MovesAvailable(board))

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/esanmiguelc/go-ttt-core/web/config"
+	"github.com/esanmiguelc/gottt/web/config"
 )
 
 func main() {

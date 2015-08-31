@@ -2,31 +2,27 @@ package controllers
 
 import (
 	"net/http"
-	"runtime"
 	"path"
-	"strconv"
+	"runtime"
 	"strings"
 	"text/template"
 
-	"github.com/esanmiguelc/go-ttt-core/Godeps/_workspace/src/github.com/julienschmidt/httprouter"
-	"github.com/esanmiguelc/go-ttt-core/core"
-	"github.com/esanmiguelc/go-ttt-core/web/constants"
-	"github.com/esanmiguelc/go-ttt-core/web/viewmodels"
+	"github.com/esanmiguelc/gottt/web/constants"
+	"github.com/esanmiguelc/gottt/web/interactors"
+	"github.com/esanmiguelc/gottt/web/viewmodels"
+	"github.com/julienschmidt/httprouter"
 )
 
 func Game(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	playerOneType := request.FormValue("FirstPlayer")
-	playerTwoType := request.FormValue("SecondPlayer")
-	boardSize, _ := strconv.Atoi(request.FormValue("BoardSize"))
-	someVar := strings.Split(request.FormValue("MovesPlayed"), "")
-	var movesPlayed []int
-	for _, elem := range someVar {
-		element, _ := strconv.Atoi(elem)
-		movesPlayed = append(movesPlayed, element)
-	}
-	gameState := core.GameTick(playerOneType, playerTwoType, boardSize, movesPlayed)
-	if core.IsGameOver(gameState.Board) {
-		http.Redirect(writer, request, constants.RESULTS_PATH, http.StatusFound)
+	gameState, isGameOver, result, _ := interactors.ExecuteGameInteractor(
+		request.FormValue("FirstPlayer"),
+		request.FormValue("SecondPlayer"),
+		request.FormValue("BoardSize"),
+		request.FormValue("MovesPlayed"),
+	)
+
+	if isGameOver {
+		http.Redirect(writer, request, constants.RESULTS_PATH+"?Result="+result, http.StatusFound)
 	} else {
 		render("game", writer, gameState)
 	}
@@ -37,7 +33,13 @@ func Index(writer http.ResponseWriter, request *http.Request, params httprouter.
 }
 
 func Results(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	viewmodel := viewmodels.ResultsViewModel{Result: request.FormValue("Result")}
+	result := request.FormValue("Result")
+	var viewmodel viewmodels.ResultsViewModel
+	if strings.ToLower(result) == strings.ToLower("Tie") {
+		viewmodel = viewmodels.ResultsViewModel{Result: result, Tie: true}
+	} else {
+		viewmodel = viewmodels.ResultsViewModel{Result: result, Tie: false}
+	}
 	render("results", writer, viewmodel)
 }
 
