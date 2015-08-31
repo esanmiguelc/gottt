@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"path"
 	"runtime"
+	"strings"
 	"text/template"
 
 	"github.com/esanmiguelc/gottt/web/constants"
@@ -32,7 +33,13 @@ func Index(writer http.ResponseWriter, request *http.Request, params httprouter.
 }
 
 func Results(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	viewmodel := viewmodels.ResultsViewModel{Result: request.FormValue("Result")}
+	result := request.FormValue("Result")
+	var viewmodel viewmodels.ResultsViewModel
+	if strings.ToLower(result) == strings.ToLower("Tie") {
+		viewmodel = viewmodels.ResultsViewModel{Result: result, Tie: true}
+	} else {
+		viewmodel = viewmodels.ResultsViewModel{Result: result, Tie: false}
+	}
 	render("results", writer, viewmodel)
 }
 

@@ -74,7 +74,7 @@ func TestResultsPageIsOk(t *testing.T) {
 	server := createServer(constants.RESULTS_PATH, Results)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + constants.RESULTS_PATH + "?result=tie")
+	response, _ := http.Get(server.URL + constants.RESULTS_PATH + resultQuery("tie"))
 	assert.Equal(t, http.StatusOK, response.StatusCode)
 }
 
@@ -82,7 +82,7 @@ func TestResultsPageContainsTieResult(t *testing.T) {
 	server := createServer(constants.RESULTS_PATH, Results)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + constants.RESULTS_PATH)
+	response, _ := http.Get(server.URL + constants.RESULTS_PATH + resultQuery("tie"))
 	html, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 	assert.True(t, strings.Contains(string(html), "tie"))
@@ -92,7 +92,7 @@ func TestResultsPageContainsWinResult(t *testing.T) {
 	server := createServer(constants.RESULTS_PATH, Results)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + constants.RESULTS_PATH + "?Result=X")
+	response, _ := http.Get(server.URL + constants.RESULTS_PATH + resultQuery("X"))
 	html, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 	assert.True(t, strings.Contains(string(html), "X wins"))
@@ -102,7 +102,7 @@ func TestRedirectsIfItThereAreErrors(t *testing.T) {
 	server := createServer(constants.RESULTS_PATH, Results)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + constants.RESULTS_PATH + "?Result=X")
+	response, _ := http.Get(server.URL + constants.RESULTS_PATH + resultQuery("X"))
 	html, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 	assert.True(t, strings.Contains(string(html), "X wins"))
@@ -112,4 +112,8 @@ func createServer(path string, fn controllerAction) *httptest.Server {
 	router := httprouter.New()
 	router.GET(constants.RESULTS_PATH, Results)
 	return httptest.NewServer(router)
+}
+
+func resultQuery(mark string) string {
+	return "?Result=" + mark
 }
