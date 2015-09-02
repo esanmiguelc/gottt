@@ -31,13 +31,13 @@ For convenience also add the bin directory to your path
     
 To add the project
 
-    go get github.com/esanmiguelc/go-ttt-core
+    go get github.com/esanmiguelc/gottt
     
 *Note: You will probably be prompted for your login information this should be fine as long as you have access to this repository*
     
     
 ## To run this project
 
-    cd src/github.com/esanmiguelc/go-ttt-core
+    cd src/github.com/esanmiguelc/gottt
     PORT=8080 go run web/main.go
     
