@@ -1,9 +1,15 @@
 {{define "results"}}
 {{template "header"}}
+<div class="row">
+  <div class="col-lg-4 col-lg-offset-4">
+<h3 class="text-center">The Results are in:</h3>
 {{if .Tie}}
-<h1>The Results are in: it's a tie!</h1>
+<h1 class="text-center">It's a tie!</h1>
 {{ else }}
-<h1>The Results are in: {{.Result}} wins!</h1>
+<h1 class="text-center">{{.Result}} wins!</h1>
 {{end}}
+<a href="/" class="btn btn-lg btn-primary center-block">Play again!</a>
+</div>
+</div>
 {{template "footer"}}
 {{end}}
