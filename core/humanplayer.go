@@ -12,7 +12,7 @@ func (human HumanPlayer) GetMark() string {
 	return human.Mark
 }
 
-func (player HumanPlayer) IsComputer() bool {
+func (human HumanPlayer) IsComputer() bool {
 	return false
 }
 

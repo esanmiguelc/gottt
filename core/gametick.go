@@ -44,7 +44,6 @@ func createSecondPlayer(playerType string) Player {
 func createPlayer(playerType, mark string) Player {
 	if playerType == COMPUTER {
 		return ImpossiblePlayer{Mark: mark}
-	} else {
-		return HumanPlayer{mark}
 	}
+	return HumanPlayer{mark}
 }
