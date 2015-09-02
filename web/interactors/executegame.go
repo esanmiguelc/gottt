@@ -47,10 +47,10 @@ func convertMovesPlayed(moves string) []int {
 	return movesPlayed
 }
 
-func removeDuplicates(a []int) []int {
+func removeDuplicates(moves []int) []int {
 	result := []int{}
 	seen := map[int]int{}
-	for _, value := range a {
+	for _, value := range moves {
 		if _, ok := seen[value]; !ok {
 			result = append(result, value)
 			seen[value] = value
