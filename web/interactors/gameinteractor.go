@@ -30,13 +30,7 @@ func ExecuteGameInteractor(playerOneType,
 	gameState := core.GameTick(playerOneType, playerTwoType, boardSizeAsInt, movesPlayedAsArray)
 
 	if core.IsGameOver(gameState.Board) {
-		if core.IsWinner(gameState.Board, core.FIRST_PLAYER) {
-			return gameState, true, core.FIRST_PLAYER, nil
-		} else if core.IsWinner(gameState.Board, core.SECOND_PLAYER) {
-			return gameState, true, core.SECOND_PLAYER, nil
-		} else {
-			return gameState, true, "Tie", nil
-		}
+		return gameState, true, core.GetResult(gameState.Board), nil
 	} else {
 		return gameState, false, "", nil
 	}

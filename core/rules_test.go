@@ -168,6 +168,25 @@ func TestIsCurrentPlayer(t *testing.T) {
 	assert.True(t, IsCurrentPlayer(board, FIRST_PLAYER))
 }
 
+func TestGetsWinnerMark(t *testing.T) {
+	board := CreateBoard(THREE_BY_THREE)
+	AddMarkToPositions(board, FIRST_PLAYER, 0, 1, 2)
+	assert.Equal(t, FIRST_PLAYER, GetResult(board))
+}
+
+func TestGetsWinnerMarkSecondPlayer(t *testing.T) {
+	board := CreateBoard(THREE_BY_THREE)
+	AddMarkToPositions(board, SECOND_PLAYER, 0, 1, 2)
+	assert.Equal(t, SECOND_PLAYER, GetResult(board))
+}
+
+func TestGetsTieIfNoWinner(t *testing.T) {
+	board := CreateBoard(THREE_BY_THREE)
+	AddMarkToPositions(board, FIRST_PLAYER, 0, 1, 5, 6, 8)
+	AddMarkToPositions(board, SECOND_PLAYER, 2, 3, 4, 7)
+	assert.Equal(t, "Tie", GetResult(board))
+}
+
 func TestGetCurrentPlayer(t *testing.T) {
 	board := CreateBoard(THREE_BY_THREE)
 	playerOne := HumanPlayer{Mark: FIRST_PLAYER}
