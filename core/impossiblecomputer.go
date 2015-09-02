@@ -1,11 +1,11 @@
 package core
 
-var move int = 0
+var move int
 
-const MAX_INT = int(^uint(0) >> 1)
-const MIN_INT = -MAX_INT - 1
+const maxInt = int(^uint(0) >> 1)
+const minInt = -maxInt - 1
 
-type Node struct {
+type node struct {
 	Score    int
 	Position int
 }
@@ -19,7 +19,7 @@ func (player ImpossiblePlayer) GetMark() string {
 }
 
 func (player ImpossiblePlayer) GetMove(board Board, myMark, opponent string) int {
-	minimax(board, myMark, opponent, MIN_INT, MAX_INT)
+	minimax(board, myMark, opponent, minInt, maxInt)
 	return move
 }
 func Score(board Board, myMark, opponent string) int {
@@ -40,23 +40,23 @@ func minimax(board Board, myMark, opponent string, minValue, maxValue int) int {
 	if IsGameOver(board) {
 		return Score(board, myMark, opponent)
 	}
-	possibleMoves := []Node{}
+	possibleMoves := []node{}
 
 	for _, position := range MovesAvailable(board) {
 		board.PlaceMove(position, GetCurrentMark(board))
 		score := minimax(board, myMark, opponent, minValue, maxValue)
-		node := Node{Score: score, Position: position}
+		currentNode := node{Score: score, Position: position}
 
 		board.Undo(position)
 
 		if IsCurrentPlayer(board, myMark) {
-			possibleMoves = append(possibleMoves, node)
-			if node.Score > minValue {
-				minValue = node.Score
+			possibleMoves = append(possibleMoves, currentNode)
+			if currentNode.Score > minValue {
+				minValue = currentNode.Score
 			}
 		} else {
-			if node.Score < maxValue {
-				maxValue = node.Score
+			if currentNode.Score < maxValue {
+				maxValue = currentNode.Score
 			}
 		}
 		if maxValue <= minValue {
@@ -72,8 +72,8 @@ func minimax(board Board, myMark, opponent string, minValue, maxValue int) int {
 	return minValue
 }
 
-func bestNode(nodes []Node) Node {
-	var result Node
+func bestNode(nodes []node) node {
+	var result node
 	for index := range nodes {
 		if index == 0 {
 			result = nodes[0]

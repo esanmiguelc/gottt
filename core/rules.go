@@ -14,17 +14,15 @@ func GetCurrentMark(board Board) string {
 	movesAvailableCount := len(MovesAvailable(board))
 	if getBoardSize(board.Slots)%3 == 0 {
 		return currentMark(movesAvailableCount, 2)
-	} else {
-		return currentMark(movesAvailableCount, 3)
 	}
+	return currentMark(movesAvailableCount, 3)
 }
 
 func GetOpponentMark(mark string) string {
 	if mark == FIRST_PLAYER {
 		return SECOND_PLAYER
-	} else {
-		return FIRST_PLAYER
 	}
+	return FIRST_PLAYER
 }
 
 func currentMark(moveCount, num int) string {
@@ -48,13 +46,10 @@ func GetResult(board Board) string {
 }
 
 func GetCurrentPlayer(board Board, playerOne, playerTwo Player) Player {
-	var currentPlayer Player
 	if IsCurrentPlayer(board, playerOne.GetMark()) {
-		currentPlayer = playerOne
-	} else {
-		currentPlayer = playerTwo
+		return playerOne
 	}
-	return currentPlayer
+	return playerTwo
 }
 
 func IsCurrentPlayer(board Board, mark string) bool {
