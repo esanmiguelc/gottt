@@ -25,8 +25,8 @@ func ExecuteGame(playerOneType,
 	if strings.ContainsAny(movesPlayed, "9") {
 		return errorResult()
 	}
-
 	movesPlayedAsArray := convertMovesPlayed(movesPlayed)
+	movesPlayedAsArray = removeDuplicates(movesPlayedAsArray)
 	gameState := core.GameTick(playerOneType, playerTwoType, boardSizeAsInt, movesPlayedAsArray)
 
 	return gameState, core.IsGameOver(gameState.Board), core.GetResult(gameState.Board), nil
@@ -45,6 +45,18 @@ func convertMovesPlayed(moves string) []int {
 	}
 
 	return movesPlayed
+}
+
+func removeDuplicates(a []int) []int {
+	result := []int{}
+	seen := map[int]int{}
+	for _, value := range a {
+		if _, ok := seen[value]; !ok {
+			result = append(result, value)
+			seen[value] = value
+		}
+	}
+	return result
 }
 
 func errorResult() (core.GameState, bool, string, error) {

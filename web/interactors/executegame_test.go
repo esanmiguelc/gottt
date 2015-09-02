@@ -61,3 +61,8 @@ func TestItReturnsMarkSecondPlayerForResult(t *testing.T) {
 	_, _, result, _ := ExecuteGame(core.HUMAN, core.COMPUTER, "3", "012437")
 	assert.Equal(t, core.SECOND_PLAYER, result)
 }
+
+func TestWhenGivenDuplicateValuesOnlyTakesTheFirstOne(t *testing.T) {
+	_, _, result, _ := ExecuteGame(core.HUMAN, core.COMPUTER, "3", "01224347")
+	assert.Equal(t, core.SECOND_PLAYER, result)
+}
