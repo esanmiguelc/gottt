@@ -107,6 +107,7 @@ func TestGameRedirectsWhenErrorInQuery(t *testing.T) {
 
 	response, _ := http.Get(server.URL + constants.GAME_PATH + "?FirtPlayer=Human&SecondPlayer=Human&BoardSize=3&MovesPlayed=01438")
 	assert.Equal(t, server.URL+constants.ERROR_PATH, response.Request.URL.String())
+	assert.Equal(t, http.StatusInternalServerError, response.StatusCode)
 }
 
 func createServer(path string, fn controllerAction) *httptest.Server {

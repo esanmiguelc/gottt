@@ -24,18 +24,11 @@ func rebuildBoard(board Board, movesPlayed []int) {
 }
 
 func takeTurn(board Board, playerOne, playerTwo Player, movesPlayed []int) []int {
-	if IsCurrentPlayer(board, playerOne.GetMark()) {
-		if playerOne.IsComputer() {
-			move := playerOne.GetMove(board, playerOne.GetMark(), playerTwo.GetMark())
-			board.PlaceMove(move, playerOne.GetMark())
-			movesPlayed = append(movesPlayed, move)
-		}
-	} else {
-		if playerTwo.IsComputer() {
-			move := playerTwo.GetMove(board, playerTwo.GetMark(), playerOne.GetMark())
-			board.PlaceMove(move, playerTwo.GetMark())
-			movesPlayed = append(movesPlayed, move)
-		}
+	currentPlayer := GetCurrentPlayer(board, playerOne, playerTwo)
+	if currentPlayer.IsComputer() {
+		move := currentPlayer.GetMove(board, currentPlayer.GetMark(), GetOpponentMark(currentPlayer.GetMark()))
+		board.PlaceMove(move, currentPlayer.GetMark())
+		movesPlayed = append(movesPlayed, move)
 	}
 	return movesPlayed
 }

@@ -134,6 +134,14 @@ func TestCurrentPlayerIsFirstPlayerForFirstMove(t *testing.T) {
 	assert.Equal(t, FIRST_PLAYER, GetCurrentMark(board))
 }
 
+func TestGetOpponentMark(t *testing.T) {
+	assert.Equal(t, SECOND_PLAYER, GetOpponentMark(FIRST_PLAYER))
+}
+
+func TestGetOpponentMarkSecondPlayer(t *testing.T) {
+	assert.Equal(t, FIRST_PLAYER, GetOpponentMark(SECOND_PLAYER))
+}
+
 func TestCurrentPlayerIsSecondPlayer(t *testing.T) {
 	board := CreateBoard(THREE_BY_THREE)
 	AddMarkToPositions(board, FIRST_PLAYER, 0)

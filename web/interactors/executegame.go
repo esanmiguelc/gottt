@@ -8,7 +8,7 @@ import (
 	"github.com/esanmiguelc/gottt/core"
 )
 
-func ExecuteGameInteractor(playerOneType,
+func ExecuteGame(playerOneType,
 	playerTwoType,
 	boardSize,
 	movesPlayed string) (core.GameState, bool, string, error) {
@@ -29,11 +29,7 @@ func ExecuteGameInteractor(playerOneType,
 	movesPlayedAsArray := convertMovesPlayed(movesPlayed)
 	gameState := core.GameTick(playerOneType, playerTwoType, boardSizeAsInt, movesPlayedAsArray)
 
-	if core.IsGameOver(gameState.Board) {
-		return gameState, true, core.GetResult(gameState.Board), nil
-	} else {
-		return gameState, false, "", nil
-	}
+	return gameState, core.IsGameOver(gameState.Board), core.GetResult(gameState.Board), nil
 }
 
 func isValidPlayerType(playerType string) bool {

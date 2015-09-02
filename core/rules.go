@@ -13,13 +13,21 @@ const COMPUTER = "Computer"
 func GetCurrentMark(board Board) string {
 	movesAvailableCount := len(MovesAvailable(board))
 	if getBoardSize(board.Slots)%3 == 0 {
-		return boardDivisibleBy(movesAvailableCount, 2)
+		return currentMark(movesAvailableCount, 2)
 	} else {
-		return boardDivisibleBy(movesAvailableCount, 3)
+		return currentMark(movesAvailableCount, 3)
 	}
 }
 
-func boardDivisibleBy(moveCount, num int) string {
+func GetOpponentMark(mark string) string {
+	if mark == FIRST_PLAYER {
+		return SECOND_PLAYER
+	} else {
+		return FIRST_PLAYER
+	}
+}
+
+func currentMark(moveCount, num int) string {
 	if moveCount%num == 0 {
 		return SECOND_PLAYER
 	}
@@ -27,13 +35,16 @@ func boardDivisibleBy(moveCount, num int) string {
 }
 
 func GetResult(board Board) string {
-	if IsWinner(board, FIRST_PLAYER) {
-		return FIRST_PLAYER
-	} else if IsWinner(board, SECOND_PLAYER) {
-		return SECOND_PLAYER
-	} else {
-		return TIE
+	if IsGameOver(board) {
+		if IsWinner(board, FIRST_PLAYER) {
+			return FIRST_PLAYER
+		} else if IsWinner(board, SECOND_PLAYER) {
+			return SECOND_PLAYER
+		} else {
+			return TIE
+		}
 	}
+	return ""
 }
 
 func GetCurrentPlayer(board Board, playerOne, playerTwo Player) Player {
