@@ -98,14 +98,16 @@ func TestResultsPageContainsWinResult(t *testing.T) {
 	assert.True(t, strings.Contains(string(html), "X wins"))
 }
 
-func TestRedirectsIfItThereAreErrors(t *testing.T) {
-	server := createServer(constants.RESULTS_PATH, Results)
+func TestGameRedirectsWhenErrorInQuery(t *testing.T) {
+	router := httprouter.New()
+	router.GET(constants.GAME_PATH, Game)
+	router.GET(constants.ERROR_PATH, Error)
+	server := httptest.NewServer(router)
 	defer server.Close()
 
-	response, _ := http.Get(server.URL + constants.RESULTS_PATH + resultQuery("X"))
-	html, _ := ioutil.ReadAll(response.Body)
-	response.Body.Close()
-	assert.True(t, strings.Contains(string(html), "X wins"))
+	response, _ := http.Get(server.URL + constants.GAME_PATH + "?FirtPlayer=Human&SecondPlayer=Human&BoardSize=3&MovesPlayed=01438")
+	assert.Equal(t, server.URL+constants.ERROR_PATH, response.Request.URL.String())
+	assert.Equal(t, http.StatusInternalServerError, response.StatusCode)
 }
 
 func createServer(path string, fn controllerAction) *httptest.Server {

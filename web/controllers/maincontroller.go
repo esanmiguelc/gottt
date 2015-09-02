@@ -7,19 +7,29 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/esanmiguelc/gottt/core"
 	"github.com/esanmiguelc/gottt/web/constants"
 	"github.com/esanmiguelc/gottt/web/interactors"
 	"github.com/esanmiguelc/gottt/web/viewmodels"
 	"github.com/julienschmidt/httprouter"
 )
 
+func Error(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.WriteHeader(http.StatusInternalServerError)
+	render("error", writer, nil)
+}
+
 func Game(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	gameState, isGameOver, result, _ := interactors.ExecuteGameInteractor(
+	gameState, isGameOver, result, err := interactors.ExecuteGame(
 		request.FormValue("FirstPlayer"),
 		request.FormValue("SecondPlayer"),
 		request.FormValue("BoardSize"),
 		request.FormValue("MovesPlayed"),
 	)
+
+	if err != nil {
+		http.Redirect(writer, request, constants.ERROR_PATH, http.StatusFound)
+	}
 
 	if isGameOver {
 		http.Redirect(writer, request, constants.RESULTS_PATH+"?Result="+result, http.StatusFound)
@@ -35,7 +45,7 @@ func Index(writer http.ResponseWriter, request *http.Request, params httprouter.
 func Results(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	result := request.FormValue("Result")
 	var viewmodel viewmodels.ResultsViewModel
-	if strings.ToLower(result) == strings.ToLower("Tie") {
+	if strings.ToLower(result) == strings.ToLower(core.TIE) {
 		viewmodel = viewmodels.ResultsViewModel{Result: result, Tie: true}
 	} else {
 		viewmodel = viewmodels.ResultsViewModel{Result: result, Tie: false}

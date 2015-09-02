@@ -8,36 +8,28 @@ import (
 	"github.com/esanmiguelc/gottt/core"
 )
 
-var emptyState, gameErrors = core.GameState{}, errors.New("Oops! Something went wrong parsing the board size")
-
-func ExecuteGameInteractor(playerOneType,
+func ExecuteGame(playerOneType,
 	playerTwoType,
 	boardSize,
 	movesPlayed string) (core.GameState, bool, string, error) {
 
 	boardSizeAsInt, boardError := strconv.Atoi(boardSize)
 	if isValidPlayerType(playerOneType) || isValidPlayerType(playerTwoType) {
-		return emptyState, false, "", gameErrors
+		return errorResult()
 	}
 
 	if boardError != nil || boardSizeAsInt != core.THREE_BY_THREE {
-		return emptyState, false, "", gameErrors
+		return errorResult()
 	}
 
+	if strings.ContainsAny(movesPlayed, "9") {
+		return errorResult()
+	}
 	movesPlayedAsArray := convertMovesPlayed(movesPlayed)
+	movesPlayedAsArray = removeDuplicates(movesPlayedAsArray)
 	gameState := core.GameTick(playerOneType, playerTwoType, boardSizeAsInt, movesPlayedAsArray)
 
-	if core.IsGameOver(gameState.Board) {
-		if core.IsWinner(gameState.Board, core.FIRST_PLAYER) {
-			return gameState, true, core.FIRST_PLAYER, nil
-		} else if core.IsWinner(gameState.Board, core.SECOND_PLAYER) {
-			return gameState, true, core.SECOND_PLAYER, nil
-		} else {
-			return gameState, true, "Tie", nil
-		}
-	} else {
-		return gameState, false, "", nil
-	}
+	return gameState, core.IsGameOver(gameState.Board), core.GetResult(gameState.Board), nil
 }
 
 func isValidPlayerType(playerType string) bool {
@@ -53,4 +45,20 @@ func convertMovesPlayed(moves string) []int {
 	}
 
 	return movesPlayed
+}
+
+func removeDuplicates(a []int) []int {
+	result := []int{}
+	seen := map[int]int{}
+	for _, value := range a {
+		if _, ok := seen[value]; !ok {
+			result = append(result, value)
+			seen[value] = value
+		}
+	}
+	return result
+}
+
+func errorResult() (core.GameState, bool, string, error) {
+	return core.GameState{}, false, "", errors.New("Oops! Something went wrong!")
 }
