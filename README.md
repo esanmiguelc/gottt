@@ -29,8 +29,10 @@ For convenience also add the bin directory to your path
 
     export PATH=$PATH:$GOPATH/bin
     
-To add the project
+To add the following to run the project
 
+    go get github.com/stretchr/testify/assert
+    go get github.com/julienschmidt/httprouter
     go get github.com/esanmiguelc/gottt
     
 *Note: You will probably be prompted for your login information this should be fine as long as you have access to this repository*
