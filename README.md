@@ -29,7 +29,7 @@ For convenience also add the bin directory to your path
 
     export PATH=$PATH:$GOPATH/bin
     
-To add the following to run the project
+Add the following to run the project
 
     go get github.com/stretchr/testify/assert
     go get github.com/julienschmidt/httprouter
@@ -37,6 +37,11 @@ To add the following to run the project
     
 *Note: You will probably be prompted for your login information this should be fine as long as you have access to this repository*
     
+    
+## To run the tests
+    
+    cd src/github.com/esanmiguelc/gottt
+    go test ./...
     
 ## To run this project
 
