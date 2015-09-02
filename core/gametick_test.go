@@ -25,7 +25,7 @@ func TestItDoesNotCareForHumans(t *testing.T) {
 }
 
 func TestGameStateHasTheRequiredFieldsToRebuildTheBoard(t *testing.T) {
-	board := Board{Slots: []string{"X", "O", "X", "", "", "", "", "", ""}}
+	board := Board{Slots: []string{FIRST_PLAYER, SECOND_PLAYER, FIRST_PLAYER, "", "", "", "", "", ""}}
 	movesPlayed := []int{0, 1, 2}
 	gameState := GameTick(COMPUTER, HUMAN, THREE_BY_THREE, movesPlayed)
 	assert.Equal(t, movesPlayed, gameState.MovesPlayed)
