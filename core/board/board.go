@@ -1,4 +1,4 @@
-package core
+package board
 
 type Board struct {
 	Slots []string

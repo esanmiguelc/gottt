@@ -1,10 +1,12 @@
-package core
+package players
+
+import "github.com/esanmiguelc/gottt/core/board"
 
 type HumanPlayer struct {
 	Mark string
 }
 
-func (human HumanPlayer) GetMove(board Board, myMark, opponent string) int {
+func (human HumanPlayer) GetMove(board board.Board, myMark, opponent string) int {
 	return 0
 }
 

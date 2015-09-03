@@ -1,4 +1,10 @@
-package core
+package players
+
+import (
+	"github.com/esanmiguelc/gottt/core/board"
+	"github.com/esanmiguelc/gottt/core/gamestate"
+	"github.com/esanmiguelc/gottt/core/rules"
+)
 
 var move int
 
@@ -18,14 +24,14 @@ func (player ImpossiblePlayer) GetMark() string {
 	return player.Mark
 }
 
-func (player ImpossiblePlayer) GetMove(board Board, myMark, opponent string) int {
+func (player ImpossiblePlayer) GetMove(board board.Board, myMark, opponent string) int {
 	minimax(board, myMark, opponent, minInt, maxInt)
 	return move
 }
-func Score(board Board, myMark, opponent string) int {
-	if IsWinner(board, myMark) {
+func Score(board board.Board, myMark, opponent string) int {
+	if rules.IsWinner(board, myMark) {
 		return 10
-	} else if IsWinner(board, opponent) {
+	} else if rules.IsWinner(board, opponent) {
 		return -10
 	} else {
 		return 0
@@ -36,20 +42,20 @@ func (player ImpossiblePlayer) IsComputer() bool {
 	return true
 }
 
-func minimax(board Board, myMark, opponent string, minValue, maxValue int) int {
-	if IsGameOver(board) {
+func minimax(board board.Board, myMark, opponent string, minValue, maxValue int) int {
+	if rules.IsGameOver(board) {
 		return Score(board, myMark, opponent)
 	}
 	possibleMoves := []node{}
 
-	for _, position := range MovesAvailable(board) {
-		board.PlaceMove(position, GetCurrentMark(board))
+	for _, position := range rules.MovesAvailable(board) {
+		board.PlaceMove(position, gamestate.GetCurrentMark(board))
 		score := minimax(board, myMark, opponent, minValue, maxValue)
 		currentNode := node{Score: score, Position: position}
 
 		board.Undo(position)
 
-		if IsCurrentPlayer(board, myMark) {
+		if gamestate.IsCurrentPlayer(board, myMark) {
 			possibleMoves = append(possibleMoves, currentNode)
 			if currentNode.Score > minValue {
 				minValue = currentNode.Score
@@ -64,7 +70,7 @@ func minimax(board Board, myMark, opponent string, minValue, maxValue int) int {
 		}
 	}
 
-	if !IsCurrentPlayer(board, myMark) {
+	if !gamestate.IsCurrentPlayer(board, myMark) {
 		return maxValue
 	}
 
