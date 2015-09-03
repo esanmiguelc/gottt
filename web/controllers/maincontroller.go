@@ -10,6 +10,7 @@ import (
 	"github.com/esanmiguelc/gottt/core/gametick"
 	"github.com/esanmiguelc/gottt/core/rules"
 	"github.com/esanmiguelc/gottt/web/constants"
+	"github.com/esanmiguelc/gottt/web/validators"
 	"github.com/esanmiguelc/gottt/web/viewmodels"
 	"github.com/julienschmidt/httprouter"
 )
@@ -20,7 +21,7 @@ func Error(writer http.ResponseWriter, request *http.Request, params httprouter.
 }
 
 func Game(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	gameState, isGameOver, result, err := gametick.ExecuteGame(
+	firstPlayerType, secondPlayerType, boardSize, movesPlayed, err := validators.ValidateParams(
 		request.FormValue("FirstPlayer"),
 		request.FormValue("SecondPlayer"),
 		request.FormValue("BoardSize"),
@@ -30,6 +31,8 @@ func Game(writer http.ResponseWriter, request *http.Request, params httprouter.P
 	if err != nil {
 		http.Redirect(writer, request, constants.ERROR_PATH, http.StatusFound)
 	}
+
+	gameState, isGameOver, result := gametick.ExecuteGame(firstPlayerType, secondPlayerType, boardSize, movesPlayed)
 
 	if isGameOver {
 		http.Redirect(writer, request, constants.RESULTS_PATH+"?Result="+result, http.StatusFound)

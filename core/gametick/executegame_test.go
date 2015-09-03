@@ -9,61 +9,36 @@ import (
 )
 
 func TestItReturnsTheGameState(t *testing.T) {
-	gameState, _, _, _ := ExecuteGame(rules.HUMAN, rules.COMPUTER, "3", "0")
+	movesPlayed := []int{0}
+	gameState, _, _ := ExecuteGame(rules.HUMAN, rules.COMPUTER, rules.THREE_BY_THREE, movesPlayed)
 	assert.Equal(t, []int{0, 4}, gameState.MovesPlayed)
 }
-
-func TestItReturnsErrorIfBoardIsNotThree(t *testing.T) {
-	_, _, _, err := ExecuteGame(rules.HUMAN, rules.COMPUTER, "4", "0")
-	assert.NotNil(t, err)
-}
-
-func TestItReturnsErrorIfInputForThreeByThreeIsNine(t *testing.T) {
-	_, _, _, err := ExecuteGame(rules.HUMAN, rules.COMPUTER, "3", "9")
-	assert.NotNil(t, err)
-}
-
-func TestItReturnsErrorIfItCantParseBoardSize(t *testing.T) {
-	_, _, _, err := ExecuteGame(rules.HUMAN, rules.COMPUTER, "T", "0")
-	assert.NotNil(t, err)
-}
-
-func TestItReturnsErrorIfItIsNotHumanOrComputerPlayerOne(t *testing.T) {
-	_, _, _, err := ExecuteGame("Hum", rules.COMPUTER, "3", "0")
-	assert.NotNil(t, err)
-}
-
-func TestItReturnsErrorIfItIsNotHumanOrComputerPlayerTwo(t *testing.T) {
-	_, _, _, err := ExecuteGame(rules.HUMAN, "Comput", "3", "0")
-	assert.NotNil(t, err)
-}
-
 func TestItReturnsFalseIfGameIsNotOver(t *testing.T) {
-	_, gameOver, _, _ := ExecuteGame(rules.HUMAN, rules.COMPUTER, "3", "0")
+	movesPlayed := []int{0}
+	_, gameOver, _ := ExecuteGame(rules.HUMAN, rules.COMPUTER, rules.THREE_BY_THREE, movesPlayed)
 	assert.False(t, gameOver)
 }
 
 func TestItReturnsTrueIfGameIsOver(t *testing.T) {
-	_, gameOver, _, _ := ExecuteGame(rules.HUMAN, rules.COMPUTER, "3", "01346")
+	movesPlayed := []int{0, 1, 3, 4, 6}
+	_, gameOver, _ := ExecuteGame(rules.HUMAN, rules.COMPUTER, rules.THREE_BY_THREE, movesPlayed)
 	assert.True(t, gameOver)
 }
 
 func TestItReturnsTieForResult(t *testing.T) {
-	_, _, result, _ := ExecuteGame(rules.HUMAN, rules.COMPUTER, "3", "048176253")
+	movesPlayed := []int{0, 4, 8, 1, 7, 6, 2, 5, 3}
+	_, _, result := ExecuteGame(rules.HUMAN, rules.COMPUTER, rules.THREE_BY_THREE, movesPlayed)
 	assert.Equal(t, rules.TIE, result)
 }
 
 func TestItReturnsMarkFirstPlayerForResult(t *testing.T) {
-	_, _, result, _ := ExecuteGame(rules.HUMAN, rules.COMPUTER, "3", "01346")
+	movesPlayed := []int{0, 1, 3, 4, 6}
+	_, _, result := ExecuteGame(rules.HUMAN, rules.COMPUTER, rules.THREE_BY_THREE, movesPlayed)
 	assert.Equal(t, rules.FIRST_PLAYER, result)
 }
 
 func TestItReturnsMarkSecondPlayerForResult(t *testing.T) {
-	_, _, result, _ := ExecuteGame(rules.HUMAN, rules.COMPUTER, "3", "012437")
-	assert.Equal(t, rules.SECOND_PLAYER, result)
-}
-
-func TestWhenGivenDuplicateValuesOnlyTakesTheFirstOne(t *testing.T) {
-	_, _, result, _ := ExecuteGame(rules.HUMAN, rules.COMPUTER, "3", "01224347")
+	movesPlayed := []int{0, 1, 2, 4, 3, 7}
+	_, _, result := ExecuteGame(rules.HUMAN, rules.COMPUTER, rules.THREE_BY_THREE, movesPlayed)
 	assert.Equal(t, rules.SECOND_PLAYER, result)
 }
