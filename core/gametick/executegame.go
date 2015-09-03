@@ -1,24 +1,25 @@
-package interactors
+package gametick
 
 import (
 	"errors"
 	"strconv"
 	"strings"
 
-	"github.com/esanmiguelc/gottt/core"
+	"github.com/esanmiguelc/gottt/core/gamestate"
+	"github.com/esanmiguelc/gottt/core/rules"
 )
 
 func ExecuteGame(playerOneType,
 	playerTwoType,
 	boardSize,
-	movesPlayed string) (core.GameState, bool, string, error) {
+	movesPlayed string) (gamestate.GameState, bool, string, error) {
 
 	boardSizeAsInt, boardError := strconv.Atoi(boardSize)
 	if isValidPlayerType(playerOneType) || isValidPlayerType(playerTwoType) {
 		return errorResult()
 	}
 
-	if boardError != nil || boardSizeAsInt != core.THREE_BY_THREE {
+	if boardError != nil || boardSizeAsInt != rules.THREE_BY_THREE {
 		return errorResult()
 	}
 
@@ -27,13 +28,13 @@ func ExecuteGame(playerOneType,
 	}
 	movesPlayedAsArray := convertMovesPlayed(movesPlayed)
 	movesPlayedAsArray = removeDuplicates(movesPlayedAsArray)
-	gameState := core.GameTick(playerOneType, playerTwoType, boardSizeAsInt, movesPlayedAsArray)
+	gameState := GameTick(playerOneType, playerTwoType, boardSizeAsInt, movesPlayedAsArray)
 
-	return gameState, core.IsGameOver(gameState.Board), core.GetResult(gameState.Board), nil
+	return gameState, rules.IsGameOver(gameState.Board), rules.GetResult(gameState.Board), nil
 }
 
 func isValidPlayerType(playerType string) bool {
-	return playerType != core.HUMAN && playerType != core.COMPUTER
+	return playerType != rules.HUMAN && playerType != rules.COMPUTER
 }
 
 func convertMovesPlayed(moves string) []int {
@@ -59,6 +60,6 @@ func removeDuplicates(moves []int) []int {
 	return result
 }
 
-func errorResult() (core.GameState, bool, string, error) {
-	return core.GameState{}, false, "", errors.New("Oops! Something went wrong!")
+func errorResult() (gamestate.GameState, bool, string, error) {
+	return gamestate.GameState{}, false, "", errors.New("Oops! Something went wrong!")
 }

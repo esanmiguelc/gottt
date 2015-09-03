@@ -1,6 +1,10 @@
-package core
+package rules
 
-import math "math"
+import (
+	math "math"
+
+	"github.com/esanmiguelc/gottt/core/board"
+)
 
 const THREE_BY_THREE = 3
 const FOUR_BY_FOUR = 4
@@ -10,29 +14,7 @@ const TIE = "Tie"
 const HUMAN = "Human"
 const COMPUTER = "Computer"
 
-func GetCurrentMark(board Board) string {
-	movesAvailableCount := len(MovesAvailable(board))
-	if getBoardSize(board.Slots)%3 == 0 {
-		return currentMark(movesAvailableCount, 2)
-	}
-	return currentMark(movesAvailableCount, 3)
-}
-
-func GetOpponentMark(mark string) string {
-	if mark == FIRST_PLAYER {
-		return SECOND_PLAYER
-	}
-	return FIRST_PLAYER
-}
-
-func currentMark(moveCount, num int) string {
-	if moveCount%num == 0 {
-		return SECOND_PLAYER
-	}
-	return FIRST_PLAYER
-}
-
-func GetResult(board Board) string {
+func GetResult(board board.Board) string {
 	if IsGameOver(board) {
 		if IsWinner(board, FIRST_PLAYER) {
 			return FIRST_PLAYER
@@ -45,18 +27,7 @@ func GetResult(board Board) string {
 	return ""
 }
 
-func GetCurrentPlayer(board Board, playerOne, playerTwo Player) Player {
-	if IsCurrentPlayer(board, playerOne.GetMark()) {
-		return playerOne
-	}
-	return playerTwo
-}
-
-func IsCurrentPlayer(board Board, mark string) bool {
-	return GetCurrentMark(board) == mark
-}
-
-func MovesAvailable(board Board) []int {
+func MovesAvailable(board board.Board) []int {
 	result := []int{}
 	for index, value := range board.Slots {
 		if value == "" {
@@ -66,25 +37,25 @@ func MovesAvailable(board Board) []int {
 	return result
 }
 
-func IsWinner(board Board, mark string) bool {
+func IsWinner(board board.Board, mark string) bool {
 	return ColumnWinner(board, mark) || DiagonalWinner(board, mark) || RowWinner(board, mark)
 }
 
-func IsGameOver(board Board) bool {
+func IsGameOver(board board.Board) bool {
 	return board.Full() || IsWinner(board, FIRST_PLAYER) || IsWinner(board, SECOND_PLAYER)
 }
 
-func ColumnWinner(board Board, mark string) bool {
+func ColumnWinner(board board.Board, mark string) bool {
 	columnCombinations := getPossibleColumnCombinations(board.Slots)
 	return checkCombinations(columnCombinations, board.Slots, mark)
 }
 
-func DiagonalWinner(board Board, mark string) bool {
+func DiagonalWinner(board board.Board, mark string) bool {
 	diagonalCombinations := getPossibleDiagonalCombinations(board.Slots)
 	return checkCombinations(diagonalCombinations, board.Slots, mark)
 }
 
-func RowWinner(board Board, mark string) bool {
+func RowWinner(board board.Board, mark string) bool {
 	rowCombinations := getPossibleRowCombinations(board.Slots)
 	return checkCombinations(rowCombinations, board.Slots, mark)
 }
@@ -112,6 +83,10 @@ func checkCombinations(combinations [][]int, slots []string, mark string) bool {
 }
 
 func getBoardSize(slots []string) int {
+	return GetBoardSize(slots)
+}
+
+func GetBoardSize(slots []string) int {
 	return int(math.Sqrt(float64(len(slots))))
 }
 

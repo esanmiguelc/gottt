@@ -7,9 +7,9 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/esanmiguelc/gottt/core"
+	"github.com/esanmiguelc/gottt/core/gametick"
+	"github.com/esanmiguelc/gottt/core/rules"
 	"github.com/esanmiguelc/gottt/web/constants"
-	"github.com/esanmiguelc/gottt/web/interactors"
 	"github.com/esanmiguelc/gottt/web/viewmodels"
 	"github.com/julienschmidt/httprouter"
 )
@@ -20,7 +20,7 @@ func Error(writer http.ResponseWriter, request *http.Request, params httprouter.
 }
 
 func Game(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	gameState, isGameOver, result, err := interactors.ExecuteGame(
+	gameState, isGameOver, result, err := gametick.ExecuteGame(
 		request.FormValue("FirstPlayer"),
 		request.FormValue("SecondPlayer"),
 		request.FormValue("BoardSize"),
@@ -45,7 +45,7 @@ func Index(writer http.ResponseWriter, request *http.Request, params httprouter.
 func Results(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	result := request.FormValue("Result")
 	var viewmodel viewmodels.ResultsViewModel
-	if strings.ToLower(result) == strings.ToLower(core.TIE) {
+	if strings.ToLower(result) == strings.ToLower(rules.TIE) {
 		viewmodel = viewmodels.ResultsViewModel{Result: result, Tie: true}
 	} else {
 		viewmodel = viewmodels.ResultsViewModel{Result: result, Tie: false}
