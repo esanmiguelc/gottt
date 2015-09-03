@@ -67,7 +67,9 @@ func TestIndexHasButtonToStartGame(t *testing.T) {
 	response, _ := http.Get(server.URL)
 	html, _ := ioutil.ReadAll(response.Body)
 	response.Body.Close()
-	assert.True(t, strings.Contains(string(html), "Start Game"))
+	assert.True(t, strings.Contains(string(html), "Play Human vs. Human"))
+	assert.True(t, strings.Contains(string(html), "Play Human vs. Computer"))
+	assert.True(t, strings.Contains(string(html), "Play Computer vs. Human"))
 }
 
 func TestResultsPageIsOk(t *testing.T) {
